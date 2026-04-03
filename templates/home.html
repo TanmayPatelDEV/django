@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django Login & CRUD</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .header-container { display: flex; justify-content: space-between; align-items: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .btn { padding: 6px 12px; text-decoration: none; border-radius: 4px; color: white; margin-right: 4px; }
+        .btn-add { background-color: #28a745; }
+        .btn-view { background-color: #17a2b8; }
+        .btn-edit { background-color: #ffc107; color: black; }
+        .btn-delete { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h2>Dashboard</h2>
+        <div>
+            <form method="GET" style="display: inline-block; margin-right: 15px;">
+                <input type="text" name="search" placeholder="Search by name..." value="{{ search_query }}">
+                <button type="submit" class="btn btn-view">Search</button>
+            </form>
+            <a href="{% url 'add_employee' %}" class="btn btn-add">Add New Record</a>
+            <form action="{% url 'logout' %}" method="post" style="display: inline-block; margin-left: 10px;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-delete">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.role }}</td>
+                <td>
+                    <a href="#" class="btn btn-view">View</a>
+                    <a href="{% url 'edit_employee' employee.id %}" class="btn btn-edit">Edit</a>
+                    <a href="{% url 'delete_employee' employee.id %}" class="btn btn-delete">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No records found. Add a record to see it here!</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
